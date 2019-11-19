@@ -2,6 +2,7 @@ body {
     background: url(../media/weapon-bg.png) #000000;
     background-position: center;
     background-size: cover;
+    margin: 0;
 }
 
 h1 {
