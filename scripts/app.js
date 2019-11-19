@@ -7,19 +7,15 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX edm: <http://www.europeana.eu/schemas/edm/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX ns: <http://example.com/namespace># handwapens uit Japan
-SELECT ?cho (SAMPLE(?imageLink) AS ?imageLinkSample) ?title ?type ?yearSpan ?placeInJapanLabel WHERE {      <https://hdl.handle.net/20.500.11840/termmaster6917> skos:narrower* ?placeInJapan .
+SELECT ?cho (SAMPLE(?imageLink) AS ?imageLinkSample) ?title ?type ?placeLabel WHERE {      <https://hdl.handle.net/20.500.11840/termmaster6917> skos:narrower* ?place .
   
   VALUES ?type { "zwaard" "Zwaard" "boog" "Boog" "lans" "Lans" "mes" "knots" "Piek" "vechtketting" "dolk" "bijl" "strijdzeis"}.
   
-     ?placeInJapan skos:prefLabel ?placeInJapanLabel .      ?cho edm:isRelatedTo <https://hdl.handle.net/20.500.11840/termmaster2815>; # selecteer handwapens
-                                                                                                                     
+     ?place skos:prefLabel ?placeLabel .      ?cho edm:isRelatedTo <https://hdl.handle.net/20.500.11840/termmaster2815>; # selecteer handwapens
+                                                                                                               
      dc:type ?type ;
-     dct:created ?yearSpan ;
      edm:isShownBy ?imageLink ;
-     dct:spatial ?placeInJapan ;
-     dc:title ?title .
-  	 #?type skos:broader ?newType.
-  	 #?newType skos:prefLabel ?typeLabel.
+     dc:title ?title.
   FILTER langMatches(lang(?title), "ned")
 } ORDER BY ?cho
 `
@@ -32,10 +28,7 @@ runQuery(endpoint, queryWeaponsJapan)
         const cleanedData = loopData(data);
         const nestedData = nestObjects(cleanedData);
         // schrijf nieuwe const voor aangepaste data
-
-        nestObjects(cleanedData)
         d3Circles(nestedData)
-        console.log(nestedData)
         // geef hier de data weer door aan de volgende functie
     }  
 
@@ -47,10 +40,9 @@ runQuery(endpoint, queryWeaponsJapan)
         return Object.assign({}, data, {
             cho: data.cho.value,
             imageLinkSample: data.imageLinkSample.value,
-            placeInJapanLabel: data.placeInJapanLabel.value,
             title: data.title.value,
             type: data.type.value.toLowerCase(),
-            yearSpan: data.yearSpan.value
+            placeLabel: data.placeLabel.value
         });
     }
     // bovenstaande functie is in samenwerking met mijn klasgenoot Chazz
@@ -84,8 +76,8 @@ function d3Circles(nestedData){
 // link to code: https://bl.ocks.org/alokkshukla/3d6be4be0ef9f6977ec6718b2916d168
 // I adjusted this code to my needs.
 console.log(dataset)
-    let diameter = 550;
-    let width = window.innerWidth;
+    const diameter = 550;
+    const width = window.innerWidth;
 
         let bubble = d3.pack(dataset)
             .size([diameter, diameter])
@@ -115,8 +107,8 @@ console.log(dataset)
             .append("g")
             .attr("class", "node")
             .attr("transform", function(d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            });
+                return "translate(" + d.x + "," + d.y + ")"
+            })
 
         node.append("title")
             .text(function(d) {
@@ -155,13 +147,6 @@ console.log(dataset)
             })
             .ease(d3.easeCubicOut);
 
-            // node.append("rect")
-            // .attr("dy", "-2em")
-            // .attr("class", "tooltip")
-            // .attr("width", width)
-            // .attr("height", height);
-            
-
             node.append("text")
             .attr("dy", "-2em")
             .attr("class", "tooltip-text")
@@ -172,5 +157,4 @@ console.log(dataset)
 
         d3.select(self.frameElement)
             .style("height", diameter + "px");
-}        
-
+}
