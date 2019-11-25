@@ -2,9 +2,9 @@
 
 ## Concept
 
-With my concept I want to give a picture of all the weapons in the collection that come from japan. I do this by means of an interactive bubble chart in which the size of the bubble shows how many objects there are in each category compared to the other bubbles.
+With my concept I want to give a picture of all the weapons in the collection that come from east asia. I do this by means of an interactive bubble chart in which the size of the bubble shows how many objects there are in each category compared to the other bubbles.
 
-When the visitor selects a bubble, the visitor receives a selection of the weapons that are in it. With this I give the visitor a picture of the use of weapons in japan and the visitor can actually see the weapons.
+When the user selects a bubble category, a pie chart appears. Within this pie chart, the user can see how many items of this category are in the collection per country in East Asia
 
 _This website was commissioned by the [university of applied science](https://www.hva.nl/) in Amsterdam and the [Museum of Volkenkunde](https://www.volkenkunde.nl/nl/plan-je-bezoek-in-museum-volkenkunde/openingstijden-en-prijzen) in Leiden_
 
@@ -13,8 +13,43 @@ _This website was commissioned by the [university of applied science](https://ww
 
 ![screenshot-functional-programming](https://user-images.githubusercontent.com/45428822/68870363-11001f00-06fb-11ea-918e-c1b65bc2ce06.png)
 
-### Data Cleaning
+## Data
 
+The data that I use comes from the joint database of the Museum van volkenkunde in Leiden. This museum collaborates with other museums ([Tropenmuseum](https://www.tropenmuseum.nl/nl), [Afrika Museum](https://www.afrikamuseum.nl/nl) and [Wereldmuseum](https://www.wereldmuseum.nl/nl)) to create this database. The collection contains all kinds of objects, artworks, clothing and images from all over the world. The total number of objects within the collection is above 700,000 unique objects. follow [this link to see te collection](https://collectie.wereldculturen.nl/#/query/20fc8276-9bd7-4e50-8c16-26f662855837)
+
+### query
+
+To retrieve the correct data from the database, I wrote a query using SPARQL that retrieves all weapons from East Asia. The variable that I retrieve per object are the objects related to hand weapons `?choSample`, the type of the weapon `?type` and the countries where the objects come from `?placeLabel`.
+
+```
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX ns: <http://example.com/namespace>
+SELECT (SAMPLE(?cho) AS ?choSample) ?type ?placeLabel WHERE {      <https://hdl.handle.net/20.500.11840/termmaster7104> skos:narrower* ?place .
+  
+  VALUES ?type { "zwaard" "Zwaard" "boog" "Boog" "lans" "Lans" "mes" "Mes" "knots" "Knots" "Piek" "Piek" "vechtketting" "Vechtketting" "dolk" "Dolk" "bijl" "Bijl" "strijdzeis" "Strijdzeis" "Sabel" "sabel" }.
+  
+     ?place skos:prefLabel ?placeLabel .      ?cho edm:isRelatedTo <https://hdl.handle.net/20.500.11840/termmaster2815>; # selecteer handwapens
+                                                                                                               
+     dc:type ?type ;
+     dct:spatial ?place .
+} ORDER BY ?cho
+```
+
+_The query above only fetches dutch names from the weapons. If you want to fetch english names, adjust the strings within the `VALUES ?typ`. Be aware of using uppercase and lowercase._
+
+###JSON
+
+After running the query, the data looks like this.
+
+![json-data](https://user-images.githubusercontent.com/45428822/69532211-a0b49180-0f75-11ea-8a90-2b521297760d.png)
+
+ The objects are still nested in `results`>` bindings`. On my wiki page [5. Data transformeren](https://github.com/MarcKunst/frontend-data/wiki/5.-Data-transformeren) I'll explain how I transform the data so it can be used within D3.
+ 
 Click [here](https://github.com/MarcKunst/functional-programming/wiki/2.-Cleaning-data) for my data cleaning practice documentation.
 
 ## Build status
