@@ -41,7 +41,11 @@ Used query and explanation can be found on my [SPARQL query wiki page](https://g
 
 Thanks to the museum of volkenkunde for sharing their data. And thanks to my teachers and colleagues for their help during this project.
 
-The d3 example I used for this project was made by Alok K. Shukla. For more information see [link to his code](https://bl.ocks.org/alokkshukla/3d6be4be0ef9f6977ec6718b2916d168)
+The D3 bubble chart example I used for this project was made by Alok K. Shukla. For more information see [link to his code](https://bl.ocks.org/alokkshukla/3d6be4be0ef9f6977ec6718b2916d168)
+
+The D3 tooltip example I used for this project was made by Justin Palmer. For more information see [link to his code](http://bl.ocks.org/caged/6476579)
+
+The D3 pie chart example I used for this project was made by Karthik Thota. For more information see [this link to his video](https://www.youtube.com/watch?time_continue=113&v=kK5kKA-0PUQ&feature=emb_logo)
 
 The background image that I use is a photo by [Maranda Vandergriff](https://unsplash.com/@mkvandergriff?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on Unsplash
 
