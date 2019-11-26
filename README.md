@@ -54,6 +54,12 @@ After running the query, the data looks like this.
  
 Click [here](https://github.com/MarcKunst/functional-programming/wiki/2.-Cleaning-data) for my data cleaning practice documentation.
 
+## Update pattern
+
+Within the visualization it is possible to select a weapon type bubble. When the user does this, the pie chart next to that weapon type will show how many weapons are in the collection per country in East Asia.
+
+The pie chart adjusts when a weapon type is selected. More about this update function on the wiki page [9. Update function](https://github.com/MarcKunst/frontend-data/wiki/9.-Update-function)
+
 ## Build status
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/78c11c1a-9928-4d9c-84ab-bec4295c931a/deploy-status)](https://app.netlify.com/sites/weapons-of-east-asia/deploys)
