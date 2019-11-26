@@ -97,11 +97,21 @@ text {
 #dashboard {
     display: flex;
     justify-content: space-around;
-
 }
 
 /* piechart */
 
 #pieChart {
     width: 50%;
+}
+
+.arc path{
+    stroke: #ffffffff;
+    stroke-width: 2;
+}
+
+.arc text {
+    font-family: 'Lato', sans-serif;
+    stroke-width: 0;
+    text-anchor: middle;
 }

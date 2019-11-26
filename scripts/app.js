@@ -26,8 +26,9 @@ runQuery(endpoint, queryWeaponsAll)
         const cleanedData = loopData(data);
         const nestedData = nestObjects(cleanedData);
         const PieChartArrays = nestObjectsPieChart(cleanedData);
-        d3Circles(nestedData, PieChartArrays);
-        createPieChart(PieChartArrays, 0)
+        const filter = filterEmptyValues(PieChartArrays);
+        d3Circles(nestedData, PieChartArrays, filter);
+        createPieChart(filter, 0);
     }  
 
     function loopData(data) {
@@ -55,10 +56,9 @@ runQuery(endpoint, queryWeaponsAll)
         const typeAmountPerRegion = d3.nest()
             .key(d => d.type)
             .rollup(d => {
-                //console.log(d)
                 return {
-                        amount: d.length,
-                        countries:[
+                    amount: d.length,
+                    countries:[
                         {
                             placeLabel: "japan",
                             countObj: d3.sum(d.map(c => c.placeLabel == "japan"? 1: 0)),
@@ -86,6 +86,23 @@ runQuery(endpoint, queryWeaponsAll)
             return typeAmountPerRegion;
     }
 
+function filterEmptyValues(data) {
+
+    const newData = data.map(item => 
+        item.value.countries.filter(country => country.countObj !== 0)
+    );
+    console.log("item",newData);
+    return newData;
+}
+
+// function createPieChart(data, n) {
+    
+//     var currentWeapon =  data[n].value.countries;
+//     currentWeapon.forEach(function(d) {
+//             d.countObj = +d.countObj; // "11" => 11
+//             d.placeLabel = d.placeLabel; 
+//         });
+
 function runQuery(url, query) {
     return fetch(url + "?query=" + encodeURIComponent(query) + "&format=json")
         .then(res => res.json())
@@ -97,7 +114,7 @@ function runQuery(url, query) {
 
 //D3 bubblechart
 
-function d3Circles(nestedData, data){
+function d3Circles(nestedData, data, filter){
     const dataset = {
         children: nestedData
     };
@@ -148,8 +165,8 @@ function d3Circles(nestedData, data){
 
         d3.selectAll(".node")
         .on("click", function(d, i) {
-            const huidigeBubble = i;
-            updatePieChart(data, huidigeBubble)
+            const currentBubble = i;
+            updatePieChart(filter, currentBubble);
         });
 
         node.append("title")
@@ -222,7 +239,7 @@ svgLegend
     .attr("cx", xCircle)
     .attr("cy", function(d){ return yCircle - size(d/25);} )
     .attr("r", function(d){ return size(d/25);})
-    .attr("stroke", "black")
+    .attr("stroke", "black");
 
 // Add legend: segments
 svgLegend
@@ -235,7 +252,7 @@ svgLegend
     .attr('y1', function(d){ return yCircle - size(d/22);} )
     .attr('y2', function(d){ return yCircle - size(d/22);} )
     .attr('stroke', 'white')
-    .style('stroke-dasharray', ('5'))
+    .style('stroke-dasharray', ('5'));
 
 // Add legend: labels
 svgLegend
@@ -245,7 +262,7 @@ svgLegend
   .append("text")
     .attr('x', xLabel)
     .attr('y', function(d){ return yCircle - size(d/24);} )
-    .text( function(d){ return d } )
+    .text( function(d){ return d; } )
     .style("font-size", 10)
     .attr('alignment-baseline', 'left');
 
@@ -254,8 +271,8 @@ svgLegend
 // link to video: https://www.youtube.com/watch?time_continue=113&v=kK5kKA-0PUQ&feature=emb_logo
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-        pieWidth = 500 - margin.right - margin.left,
-        pieHeight = 500 - margin.top - margin.bottom,
+        pieWidth = 400 - margin.right - margin.left,
+        pieHeight = 400 - margin.top - margin.bottom,
         pieRadius = pieWidth/2;
 
 //color
@@ -275,7 +292,6 @@ var arcLabel = d3.arc()
 var pie = d3.pie()
     .sort(null)
     .value(function(d) {
-        console.log("ggg",d);
         return d.countObj;
     });
 
@@ -287,21 +303,24 @@ var svg = d3.select("#pieChart").append("svg")
 
 //create pie chart
 function createPieChart(data, n) {
-var currentWapen =  data[n].value.countries;
-currentWapen.forEach(function(d) {
+    
+var currentWeapon =  data[n];
+currentWeapon.forEach(function(d) {
         d.countObj = +d.countObj; // "11" => 11
         d.placeLabel = d.placeLabel; 
     });
 
     var g = svg.selectAll(".arc")
-        .data(pie(data[n].value.countries))
+        .data(pie(data[n]))
         .enter().append("g")
         .attr("class", "arc");
 
     g.append("path")
         .attr("d", arc)
-        .style("fill", function(d) { return color(d.value.countries);} )
-        .style("stroke", "white");
+        .style("fill", function (d) {
+            return color(d.data.placeLabel);
+        });
+        //.style("stroke", "white");
 
     g.append("text")
         .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
@@ -310,17 +329,21 @@ currentWapen.forEach(function(d) {
         .text( function(d) { return d.data.placeLabel;});
 }
 
-function updatePieChart(data, n, color) {
+function updatePieChart(data, n) {
    d3.selectAll("path")
-        .data(pie(data[n].value.countries))
+        .data(pie(data[n]))
+        .enter().append("path")
         .attr("d", arc)
-        .style("fill", color);
-
-    d3.selectAll(".pieText")
-    //.data(data[n].value.countries)
-        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-        .attr("dy", ".35em")
-        .text( function(d) { return d.data.placeLabel;});
-    }
-
+        .style("fill", function (d) {
+            return color(d.data.placeLabel);
+        })
+        .exit()
+        .remove();
     
+    d3.selectAll(".pieText")
+        .data(data[n])
+        .enter().append("text")
+        .attr("class", "pieText")
+        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+        .text( function(d) { return d.placeLabel;});
+    }
