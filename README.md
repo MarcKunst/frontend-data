@@ -2,7 +2,9 @@
 
 ## Concept
 
-With my concept I want to give a picture of all the weapons in the collection that come from east asia. I do this by means of an interactive bubble chart in which the size of the bubble shows how many objects there are in each category compared to the other bubbles.
+With my concept I want to give a picture of all the weapons in the collection that come from East A sia. I do this by means of an interactive bubble chart in which the size of the bubble shows how many objects there are in each category compared to the other bubbles.
+
+The target audience for this project is the interested museum visitor. With the visualization of weapons from Asia, I want to give the visitor to the museum an overview of the entire collection. The visualization must give a picture of the types of weapons that were used in East Asia in the past
 
 When the user selects a bubble category, a pie chart appears. Within this pie chart, the user can see how many items of this category are in the collection per country in East Asia
 
@@ -54,7 +56,7 @@ Click [here](https://github.com/MarcKunst/functional-programming/wiki/2.-Cleanin
 
 ## Build status
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/ab58b408-dcbd-4045-a959-1663b591fac3/deploy-status)](https://app.netlify.com/sites/weapons-of-japan/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/78c11c1a-9928-4d9c-84ab-bec4295c931a/deploy-status)](https://app.netlify.com/sites/weapons-of-east-asia/deploys)
 
 
 ## Installation
