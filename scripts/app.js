@@ -27,8 +27,10 @@ runQuery(endpoint, queryWeaponsAll)
         const nestedData = nestObjects(cleanedData);
         const PieChartArrays = nestObjectsPieChart(cleanedData);
         const filter = filterEmptyValues(PieChartArrays);
+        console.log(filter)
         d3Circles(nestedData, PieChartArrays, filter);
         createPieChart(filter, 0);
+        
     }  
 
     function loopData(data) {
@@ -91,17 +93,8 @@ function filterEmptyValues(data) {
     const newData = data.map(item => 
         item.value.countries.filter(country => country.countObj !== 0)
     );
-    console.log("item",newData);
     return newData;
 }
-
-// function createPieChart(data, n) {
-    
-//     var currentWeapon =  data[n].value.countries;
-//     currentWeapon.forEach(function(d) {
-//             d.countObj = +d.countObj; // "11" => 11
-//             d.placeLabel = d.placeLabel; 
-//         });
 
 function runQuery(url, query) {
     return fetch(url + "?query=" + encodeURIComponent(query) + "&format=json")
@@ -121,8 +114,8 @@ function d3Circles(nestedData, data, filter){
 //The code below (related to the bubblechart) is written by Alok K. Shukla and adjusted by me to fit my project
 // link to code: https://bl.ocks.org/alokkshukla/3d6be4be0ef9f6977ec6718b2916d168
 
-    const bubbleChartWidth = window.innerWidth/2;
-    const bubbleChartHeight = window.innerHeight/1.2;
+    const bubbleChartWidth = 400;
+    const bubbleChartHeight = 400;
 
         let bubble = d3.pack(dataset)
             .size([bubbleChartWidth, bubbleChartHeight])
@@ -166,7 +159,7 @@ function d3Circles(nestedData, data, filter){
         d3.selectAll(".node")
         .on("click", function(d, i) {
             const currentBubble = i;
-            updatePieChart(filter, currentBubble);
+            createPieChart(filter, currentBubble);
         });
 
         node.append("title")
@@ -210,12 +203,109 @@ function d3Circles(nestedData, data, filter){
             .style("height", bubbleChartHeight + "px");
 }
 
+// Pie chart
+//The code below (related to the Pie chart) is written by Karthik Thota and adjusted by me to fit my project
+// link to video: https://www.youtube.com/watch?time_continue=113&v=kK5kKA-0PUQ&feature=emb_logo
+
+const margin = {top: 20, right: 20, bottom: 20, left: 20},
+        pieWidth = 350 - margin.right - margin.left,
+        pieHeight = 350 - margin.top - margin.bottom,
+        pieRadius = pieWidth/2;
+
+//color
+const color = d3.scaleOrdinal()
+    .range(["#f1c40f", "#2ecc71", "#9b59b6", "#e74c3c", "#3498db"]);
+
+//arc generator
+const arc = d3.arc()
+    .outerRadius(pieRadius - 10)
+    .innerRadius(0);
+
+const arcLabel = d3.arc()
+    .outerRadius(pieRadius - 50)
+    .innerRadius(pieRadius - 50);
+
+//pie generator
+const pie = d3.pie()
+    .sort(null)
+    .value(function(d) {
+        return d.countObj;
+    });
+
+const svg = d3.select("#pieChart").append("svg")
+    .attr("width", pieWidth)
+    .attr("height", pieHeight)
+    .append("g")
+    .attr("transform", "translate(" + pieWidth/2 + "," + pieHeight/2 + ")");
+
+//create pie chart
+function createPieChart(data, n) {
+
+    let g = svg.selectAll(".arc")
+        .data(pie(data[n]))
+
+    let gEnter = g.enter().append("g")
+        .attr("class", "arc");
+
+    gEnter.append("path")
+        .attr("d", arc)
+        .style("fill", function (d) {
+            return color(d.data.placeLabel);
+        })
+        .transition()
+        .ease(d3.easeCircle)
+        .duration(1000)
+        .attrTween("d", function(b){
+            b.innerRadius = 0; // animation starts at 0
+            let i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+            return function(t) { return arc(i(t));};
+        });
+
+    gEnter.append("text")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+        .attr("dy", ".35em")
+        .attr("class", "pieText")
+        .text( function(d) { return d.data.countObj;});
+
+    updatePieChart(g);
+}
+
+function updatePieChart(g) {
+
+        g.select("path")
+        .attr("d", arc)
+        .style("fill", function (d) {
+            return color(d.data.placeLabel);
+        })
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attrTween("d", function(b){
+            b.innerRadius = 0; // animation starts at 0
+            let i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+            return function(t) { return arc(i(t));};
+        });
+
+        g.select("text")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+        .text( function(d) { return d.data.countObj })
+    
+        g.exit().remove()
+    } 
+
+
 // Bubble legend
 //The code below (related to the bubble chart legend) is written by Justin Palmer and adjusted by me to fit my project
 // link to code: http://bl.ocks.org/caged/6476579
 
-var height = 460
-var width = 460
+var height = 360
+var width = 360
 var svgLegend = d3.select("#bubbleLegend")
   .append("svg")
     .attr("width", width)
@@ -223,13 +313,13 @@ var svgLegend = d3.select("#bubbleLegend")
 
 // The scale you use for bubble size
 var size = d3.scaleSqrt()
-  .domain([1, 100])  // What's in the data, let's say it is percentage
-  .range([1, 100])  // Size in pixel
+  .domain([1, 60])  // What's in the data, let's say it is percentage
+  .range([1, 150])  // Size in pixel
 
 // Add legend: circles
-var valuesToShow = [500, 1000, 2000, 4000]
-var xCircle = 230
-var xLabel = 420
+var valuesToShow = [10, 30, 60]
+var xCircle = 130
+var xLabel = 260
 var yCircle = 330
 svgLegend
   .selectAll("legend")
@@ -237,8 +327,8 @@ svgLegend
   .enter()
   .append("circle")
     .attr("cx", xCircle)
-    .attr("cy", function(d){ return yCircle - size(d/25);} )
-    .attr("r", function(d){ return size(d/25);})
+    .attr("cy", function(d){ return yCircle - size(d/2);} )
+    .attr("r", function(d){ return size(d/2);})
     .attr("stroke", "black");
 
 // Add legend: segments
@@ -247,10 +337,10 @@ svgLegend
   .data(valuesToShow)
   .enter()
   .append("line")
-    .attr('x1', function(d){ return xCircle + size(d/25);} )
-    .attr('x2', xLabel-25)
-    .attr('y1', function(d){ return yCircle - size(d/22);} )
-    .attr('y2', function(d){ return yCircle - size(d/22);} )
+    .attr('x1', function(d){ return xCircle + size(d/2);} )
+    .attr('x2', xLabel-10)
+    .attr('y1', function(d){ return yCircle - size(d/2);} )
+    .attr('y2', function(d){ return yCircle - size(d/2);} )
     .attr('stroke', 'white')
     .style('stroke-dasharray', ('5'));
 
@@ -261,89 +351,7 @@ svgLegend
   .enter()
   .append("text")
     .attr('x', xLabel)
-    .attr('y', function(d){ return yCircle - size(d/24);} )
+    .attr('y', function(d){ return yCircle - size(d/2);} )
+    .attr("class", "bubbleLegendText")
     .text( function(d){ return d; } )
-    .style("font-size", 10)
-    .attr('alignment-baseline', 'left');
-
-// Pie chart
-//The code below (related to the Pie chart) is written by Karthik Thota and adjusted by me to fit my project
-// link to video: https://www.youtube.com/watch?time_continue=113&v=kK5kKA-0PUQ&feature=emb_logo
-
-var margin = {top: 20, right: 20, bottom: 20, left: 20},
-        pieWidth = 400 - margin.right - margin.left,
-        pieHeight = 400 - margin.top - margin.bottom,
-        pieRadius = pieWidth/2;
-
-//color
-var color = d3.scaleOrdinal()
-    .range(["#f1c40f", "#2ecc71", "#9b59b6", "#e74c3c", "#3498db"]);
-
-//arc generator
-var arc = d3.arc()
-    .outerRadius(pieRadius - 10)
-    .innerRadius(0);
-
-var arcLabel = d3.arc()
-    .outerRadius(pieRadius - 50)
-    .innerRadius(pieRadius -50);
-
-//pie generator
-var pie = d3.pie()
-    .sort(null)
-    .value(function(d) {
-        return d.countObj;
-    });
-
-var svg = d3.select("#pieChart").append("svg")
-    .attr("width", pieWidth)
-    .attr("height", pieHeight)
-    .append("g")
-    .attr("transform", "translate(" + pieWidth/2 + "," + pieHeight/2 + ")");
-
-//create pie chart
-function createPieChart(data, n) {
-    
-var currentWeapon =  data[n];
-currentWeapon.forEach(function(d) {
-        d.countObj = +d.countObj; // "11" => 11
-        d.placeLabel = d.placeLabel; 
-    });
-
-    var g = svg.selectAll(".arc")
-        .data(pie(data[n]))
-        .enter().append("g")
-        .attr("class", "arc");
-
-    g.append("path")
-        .attr("d", arc)
-        .style("fill", function (d) {
-            return color(d.data.placeLabel);
-        });
-        //.style("stroke", "white");
-
-    g.append("text")
-        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-        .attr("dy", ".35em")
-        .attr("class", "pieText")
-        .text( function(d) { return d.data.placeLabel;});
-}
-
-function updatePieChart(data, n) {
-   d3.selectAll("path")
-        .data(pie(data[n]))
-        .enter().append("path")
-        .attr("d", arc)
-        .style("fill", function (d) {
-            return color(d.data.placeLabel);
-        })
-        .exit()
-        .remove();
-    
-    d3.selectAll(".pieText")
-        .data(data[n])
-        .enter().append("text")
-        .attr("class", "pieText")
-        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-        .text( function(d) { return d.placeLabel;});
-    }
+    .attr('alignment-baseline', 'middel');

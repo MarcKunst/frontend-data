@@ -8,6 +8,11 @@ body {
     margin: 0;
 }
 
+#dashboard {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 h1 {
     color: #fff;
     font-family: 'Lato', sans-serif;
@@ -16,13 +21,7 @@ h1 {
 }
 
 #bubbleChart {
-    width: 50%;
-}
-
-#bubbleLegend {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    width: 33%;
 }
 
 svg.bubble {
@@ -94,15 +93,10 @@ text {
     left: 0;
   }
 
-#dashboard {
-    display: flex;
-    justify-content: space-around;
-}
-
 /* piechart */
 
 #pieChart {
-    width: 50%;
+    width: 33%;
 }
 
 .arc path{
@@ -114,4 +108,19 @@ text {
     font-family: 'Lato', sans-serif;
     stroke-width: 0;
     text-anchor: middle;
+}
+
+/* legend container */
+
+#legendContainer {
+    width: 33%
+}
+
+#bubbleLegend {
+    
+}
+
+.bubbleLegendText {
+    font-family: 'Lato', sans-serif;
+    font-size: 8pt;
 }
