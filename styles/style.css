@@ -10,6 +10,15 @@ body {
 
 #dashboard {
     display: flex;
+    justify-content: space-between;
+}
+
+#charts {
+    width: 100%;
+}
+
+#charts-container {
+    display: flex;
     justify-content: space-evenly;
 }
 
@@ -17,11 +26,13 @@ h1 {
     color: #fff;
     font-family: 'Lato', sans-serif;
     font-weight: 100;
+    font-size: 2rem;
     text-align: center;
+    margin-bottom: 3em;
 }
 
 #bubbleChart {
-    width: 33%;
+    width: 100%;
 }
 
 svg.bubble {
@@ -96,7 +107,7 @@ text {
 /* piechart */
 
 #pieChart {
-    width: 33%;
+    width: 100%;
 }
 
 #pieChart>svg {
@@ -118,10 +129,25 @@ text {
 /* legend container */
 
 #legendContainer {
-    width: 33%
+    width: 33%;
+    background: #00000091;
 }
 
-#bubbleLegend>svg {
+#legendContainer>h2 {
+    color: #fdfdfd;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    text-decoration: underline;
+}
+
+#legendContainer>h3 {
+    color: #fdfdfd;
+    text-align: center;
+    font-weight: 100;
+    font-family: 'Lato', sans-serif;
+}
+
+#bubbleLegend > svg {
     display: block;
     margin: 0 auto;
 }

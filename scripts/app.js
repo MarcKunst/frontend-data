@@ -244,8 +244,19 @@ function createPieChart(data, n) {
     let g = svg.selectAll(".arc")
         .data(pie(data[n]))
 
+        let tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([5, 0])
+        .html(function(d) {
+          return d.data.placeLabel + ", aantal:" + d.data.countObj;
+        });
+
+        svg.call(tip);
+
     let gEnter = g.enter().append("g")
-        .attr("class", "arc");
+        .attr("class", "arc")
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
 
     gEnter.append("path")
         .attr("d", arc)
@@ -259,7 +270,8 @@ function createPieChart(data, n) {
             b.innerRadius = 0; // animation starts at 0
             let i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
             return function(t) { return arc(i(t));};
-        });
+        })
+        
 
     gEnter.append("text")
         .transition()
@@ -268,7 +280,7 @@ function createPieChart(data, n) {
         .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
         .attr("dy", ".35em")
         .attr("class", "pieText")
-        .text( function(d) { return d.data.countObj;});
+        .text( function(d) { return d.data.countObj;})
 
     updatePieChart(g);
 }
@@ -304,7 +316,7 @@ function updatePieChart(g) {
 //The code below (related to the bubble chart legend) is written by Justin Palmer and adjusted by me to fit my project
 // link to code: http://bl.ocks.org/caged/6476579
 
-var height = 360
+var height = 220
 var width = 360
 var svgLegend = d3.select("#bubbleLegend")
   .append("svg")
@@ -317,10 +329,10 @@ var size = d3.scaleSqrt()
   .range([1, 150])  // Size in pixel
 
 // Add legend: circles
-var valuesToShow = [10, 30, 60]
-var xCircle = 200
-var xLabel = 320
-var yCircle = 330
+var valuesToShow = [15, 30, 60]
+var xCircle = 140
+var xLabel = 300
+var yCircle = 210
 svgLegend
   .selectAll("legend")
   .data(valuesToShow)
@@ -338,7 +350,7 @@ svgLegend
   .enter()
   .append("line")
     .attr('x1', function(d){ return xCircle + size(d/2);} )
-    .attr('x2', xLabel-10)
+    .attr('x2', xLabel-35)
     .attr('y1', function(d){ return yCircle - size(d/2);} )
     .attr('y2', function(d){ return yCircle - size(d/2);} )
     .attr('stroke', 'white')
@@ -353,5 +365,5 @@ svgLegend
     .attr('x', xLabel)
     .attr('y', function(d){ return yCircle - size(d/2);} )
     .attr("class", "bubbleLegendText")
-    .text( function(d){ return d; } )
+    .text( function(d){ return d + " objecten" } )
     .attr('alignment-baseline', 'middel');
