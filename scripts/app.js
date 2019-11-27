@@ -240,7 +240,7 @@ const svg = d3.select("#pieChart").append("svg")
 
 //create pie chart
 function createPieChart(data, n) {
-
+    console.log(data[n])    
     let g = svg.selectAll(".arc")
         .data(pie(data[n]))
 
@@ -318,8 +318,8 @@ var size = d3.scaleSqrt()
 
 // Add legend: circles
 var valuesToShow = [10, 30, 60]
-var xCircle = 130
-var xLabel = 260
+var xCircle = 200
+var xLabel = 320
 var yCircle = 330
 svgLegend
   .selectAll("legend")

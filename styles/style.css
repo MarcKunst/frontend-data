@@ -99,6 +99,11 @@ text {
     width: 33%;
 }
 
+#pieChart>svg {
+    display: block;
+    margin: 0 auto;
+}
+
 .arc path{
     stroke: #ffffffff;
     stroke-width: 2;
@@ -116,8 +121,9 @@ text {
     width: 33%
 }
 
-#bubbleLegend {
-    
+#bubbleLegend>svg {
+    display: block;
+    margin: 0 auto;
 }
 
 .bubbleLegendText {
