@@ -123,9 +123,9 @@ function d3Circles(nestedData, data, filter){
         
             let tip = d3.tip()
             .attr('class', 'd3-tip')
-            .offset([-10, 0])
+            .offset([-10, 100])
             .html(function(d) {
-              return d.data.key + ", aantal: " + d.value;
+              return "In totaal " + d.value + " objecten" + " van het wapentype " + d.data.key;
             });
 
         let svg = d3.select("#bubbleChart")
@@ -161,11 +161,6 @@ function d3Circles(nestedData, data, filter){
             const currentBubble = i;
             createPieChart(filter, currentBubble);
         });
-
-        node.append("title")
-            .text(function(d) {
-                return d.data.key + ": " + d.value;
-            });
             
         let circle = node.append("circle")
             .attr("r", function(d) {
@@ -214,12 +209,12 @@ const margin = {top: 20, right: 20, bottom: 20, left: 20},
 
 //color
 const color = d3.scaleOrdinal()
-    .range(["#f1c40f", "#2ecc71", "#9b59b6", "#e74c3c", "#3498db"]);
+    .range(["#f1c40f91", "#2ecc7191", "#9b59b691", "#e74c3c91", "#3498db91"]);
 
 //arc generator
 const arc = d3.arc()
     .outerRadius(pieRadius - 10)
-    .innerRadius(0);
+    .innerRadius(pieRadius - 70);
 
 const arcLabel = d3.arc()
     .outerRadius(pieRadius - 50)
@@ -248,7 +243,7 @@ function createPieChart(data, n) {
         .attr('class', 'd3-tip')
         .offset([5, 0])
         .html(function(d) {
-          return d.data.placeLabel + ", aantal:" + d.data.countObj;
+          return d.data.countObj + " objecten uit " + d.data.placeLabel;
         });
 
         svg.call(tip);
@@ -264,7 +259,7 @@ function createPieChart(data, n) {
             return color(d.data.placeLabel);
         })
         .transition()
-        .ease(d3.easeCircle)
+        .ease(d3.easeCubicIn)
         .duration(1000)
         .attrTween("d", function(b){
             b.innerRadius = 0; // animation starts at 0
@@ -273,14 +268,14 @@ function createPieChart(data, n) {
         })
         
 
-    gEnter.append("text")
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(1000)
-        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-        .attr("dy", ".35em")
-        .attr("class", "pieText")
-        .text( function(d) { return d.data.countObj;})
+    // gEnter.append("text")
+    //     .transition()
+    //     .ease(d3.easeLinear)
+    //     .duration(1000)
+    //     .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+    //     .attr("dy", ".35em")
+    //     .attr("class", "pieText")
+    //     .text( function(d) { return d.data.countObj;})
 
     updatePieChart(g);
 }
@@ -293,7 +288,7 @@ function updatePieChart(g) {
             return color(d.data.placeLabel);
         })
         .transition()
-        .ease(d3.easeLinear)
+        .ease(d3.easeCubicIn)
         .duration(1000)
         .attrTween("d", function(b){
             b.innerRadius = 0; // animation starts at 0
@@ -301,12 +296,12 @@ function updatePieChart(g) {
             return function(t) { return arc(i(t));};
         });
 
-        g.select("text")
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(1000)
-        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-        .text( function(d) { return d.data.countObj })
+        // g.select("text")
+        // .transition()
+        // .ease(d3.easeLinear)
+        // .duration(1000)
+        // .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+        // .text( function(d) { return d.data.countObj })
     
         g.exit().remove()
     } 
@@ -367,3 +362,12 @@ svgLegend
     .attr("class", "bubbleLegendText")
     .text( function(d){ return d + " objecten" } )
     .attr('alignment-baseline', 'middel');
+
+// Pie legend
+
+var pieLegend = d3.select("#pieLegend")
+
+pieLegend.append("circle").attr("cx",200).attr("cy",130).attr("r", 6).style("fill", "#69b3a2")
+pieLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
+pieLegend.append("text").attr("x", 220).attr("y", 130).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle")
+pieLegend.append("text").attr("x", 220).attr("y", 160).text("China").style("font-size", "15px").attr("alignment-baseline","middle")

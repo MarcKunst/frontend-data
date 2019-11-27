@@ -19,7 +19,7 @@ body {
 
 #charts-container {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 h1 {
@@ -37,7 +37,7 @@ h1 {
 
 svg.bubble {
     display: block;
-    margin: auto;
+    margin: 0 0 0 3em;
     height: 100vh;
     width: 100%;
 }
@@ -45,7 +45,7 @@ svg.bubble {
 circle {
     fill:  #0000006b;
     stroke: #ffffffff;
-    stroke-width: 2;
+    stroke-width: 1;
     transition: fill 0.5s ease;
 }
 
@@ -78,14 +78,15 @@ text {
 .d3-tip {
     line-height: 1;
     padding: 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.849);
     color: #fdfdfd;
-    border-radius: 2px;
+    border-radius: 4px;
     font-family: 'Lato', sans-serif;
+    font-size: 0.8rem;
   }
   
   /* Creates a small triangle extender for the tooltip */
-  .d3-tip:after {
+  /* .d3-tip:after {
     box-sizing: border-box;
     display: inline;
     font-size: 10px;
@@ -95,7 +96,7 @@ text {
     content: "\25BC";
     position: absolute;
     text-align: center;
-  }
+  } */
   
   /* Style northward tooltips differently */
   .d3-tip.n:after {
@@ -117,7 +118,11 @@ text {
 
 .arc path{
     stroke: #ffffffff;
-    stroke-width: 2;
+    stroke-width: 1;
+}
+
+.arc path:hover {
+    stroke-width: 3;
 }
 
 .arc text {
@@ -155,4 +160,10 @@ text {
 .bubbleLegendText {
     font-family: 'Lato', sans-serif;
     font-size: 8pt;
+}
+
+/* Pie legend */
+#pieLegend {
+    color: white;
+    height: 100%;
 }
