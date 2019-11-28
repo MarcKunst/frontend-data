@@ -17,7 +17,7 @@ _This website was commissioned by the [university of applied science](https://ww
 
 ### Screenshot
 
-![screenshot-functional-programming](https://user-images.githubusercontent.com/45428822/68870363-11001f00-06fb-11ea-918e-c1b65bc2ce06.png)
+![Schermafbeelding 2019-11-28 om 15 07 56](https://user-images.githubusercontent.com/45428822/69812821-3ad43e00-11f1-11ea-9c57-ced5d671aa99.png)
 
 ## Data
 
