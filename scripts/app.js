@@ -27,9 +27,9 @@ runQuery(endpoint, queryWeaponsAll)
         const nestedData = nestObjects(cleanedData);
         const PieChartArrays = nestObjectsPieChart(cleanedData);
         const filter = filterEmptyValues(PieChartArrays);
-        console.log(filter)
         d3Circles(nestedData, PieChartArrays, filter);
         createPieChart(filter, 0);
+        adjustHeader(PieChartArrays, 0);
         
     }  
 
@@ -89,7 +89,6 @@ runQuery(endpoint, queryWeaponsAll)
     }
 
 function filterEmptyValues(data) {
-
     const newData = data.map(item => 
         item.value.countries.filter(country => country.countObj !== 0)
     );
@@ -160,6 +159,7 @@ function d3Circles(nestedData, data, filter){
         .on("click", function(d, i) {
             const currentBubble = i;
             createPieChart(filter, currentBubble);
+            adjustHeader(data, currentBubble);
         });
             
         let circle = node.append("circle")
@@ -234,11 +234,11 @@ const svg = d3.select("#pieChart").append("svg")
     .attr("transform", "translate(" + pieWidth/2 + "," + pieHeight/2 + ")");
 
 //create pie chart
-function createPieChart(data, n) {
-    console.log(data[n])    
+function createPieChart(data, n) { 
     let g = svg.selectAll(".arc")
         .data(pie(data[n]))
 
+        //tooltip
         let tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([5, 0])
@@ -268,14 +268,14 @@ function createPieChart(data, n) {
         })
         
 
-    // gEnter.append("text")
-    //     .transition()
-    //     .ease(d3.easeLinear)
-    //     .duration(1000)
-    //     .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-    //     .attr("dy", ".35em")
-    //     .attr("class", "pieText")
-    //     .text( function(d) { return d.data.countObj;})
+    gEnter.append("text")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+        .attr("dy", ".35em")
+        .attr("class", "pieText")
+        .text( function(d) { return d.data.countObj;})
 
     updatePieChart(g);
 }
@@ -296,22 +296,28 @@ function updatePieChart(g) {
             return function(t) { return arc(i(t));};
         });
 
-        // g.select("text")
-        // .transition()
-        // .ease(d3.easeLinear)
-        // .duration(1000)
-        // .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
-        // .text( function(d) { return d.data.countObj })
+        g.select("text")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("transform", function(d) { return "translate(" + arcLabel.centroid(d) + ")";})
+        .text( function(d) { return d.data.countObj })
     
         g.exit().remove()
-    } 
+    }
+
+function adjustHeader(data, n) {
+    
+    document.getElementById('pieHeaderText').innerText = "Wapentype: " + data[n].key;
+    document.getElementById('weaponAmount').innerText = "Totaal aantal: " + data[n].value.amount;
+}
 
 
 // Bubble legend
 //The code below (related to the bubble chart legend) is written by Justin Palmer and adjusted by me to fit my project
 // link to code: http://bl.ocks.org/caged/6476579
 
-var height = 220
+var height = 250
 var width = 360
 var svgLegend = d3.select("#bubbleLegend")
   .append("svg")
@@ -365,9 +371,17 @@ svgLegend
 
 // Pie legend
 
-var pieLegend = d3.select("#pieLegend")
+var pieLegend = d3.select("#pieLegend").append("svg")
 
-pieLegend.append("circle").attr("cx",200).attr("cy",130).attr("r", 6).style("fill", "#69b3a2")
-pieLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
-pieLegend.append("text").attr("x", 220).attr("y", 130).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle")
-pieLegend.append("text").attr("x", 220).attr("y", 160).text("China").style("font-size", "15px").attr("alignment-baseline","middle")
+pieLegend.append("circle").attr("cx",70).attr("cy",10).attr("r", 6).style("fill", "#f1c40f91")
+pieLegend.append("text").attr("x", 110).attr("y", 15).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle")
+pieLegend.append("circle").attr("cx",70).attr("cy",40).attr("r", 6).style("fill", "#2ecc7191")
+pieLegend.append("text").attr("x", 110).attr("y", 45).text("China").style("font-size", "15px").attr("alignment-baseline","middle")
+pieLegend.append("circle").attr("cx",70).attr("cy",70).attr("r", 6).style("fill", "#9b59b691")
+pieLegend.append("text").attr("x", 110).attr("y", 75).text("Tibet").style("font-size", "15px").attr("alignment-baseline","middle")
+pieLegend.append("circle").attr("cx",70).attr("cy",100).attr("r", 6).style("fill", "#e74c3c91")
+pieLegend.append("text").attr("x", 120).attr("y", 105).text("Xiamen").style("font-size", "15px").attr("alignment-baseline","middle")
+pieLegend.append("circle").attr("cx",70).attr("cy",130).attr("r", 6).style("fill", "#3498db91")
+pieLegend.append("text").attr("x", 135).attr("y", 135).text("Shimonoseki").style("font-size", "15px").attr("alignment-baseline","middle")
+
+//(["#f1c40f91", "#2ecc7191", "#9b59b691", "#e74c3c91", "#3498db91"]);

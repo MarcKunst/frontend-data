@@ -28,7 +28,7 @@ h1 {
     font-weight: 100;
     font-size: 2rem;
     text-align: center;
-    margin-bottom: 3em;
+    margin-bottom: 3rem;
 }
 
 #bubbleChart {
@@ -52,6 +52,7 @@ circle {
 circle:hover {
     fill: #63636318;
     stroke-width: 3;
+    cursor: pointer;
 }
 
 .tooltip {
@@ -145,7 +146,7 @@ text {
     text-decoration: underline;
 }
 
-#legendContainer>h3 {
+h3 {
     color: #fdfdfd;
     text-align: center;
     font-weight: 100;
@@ -166,4 +167,36 @@ text {
 #pieLegend {
     color: white;
     height: 100%;
+}
+
+#text-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+#bubbleHeader {
+    width: 50%;
+    margin-bottom: 2em;
+}
+
+#bubbleHeader>h3 {
+    text-align: left;
+    padding-left: 3em;
+}
+
+#pieHeader{
+    width: 50%;
+    margin-bottom: 1em;
+}
+
+#pieHeader>h3 {
+    text-align: left;
+    padding-left: 3em;
+}
+
+p {
+    color: #dfdfdf;
+    font-family: 'Lato', sans-serif;
+    font-size: 10pt;
+    padding-left: 4em;
 }
