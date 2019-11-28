@@ -1,5 +1,9 @@
 # Frontend data
 
+## Build status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/78c11c1a-9928-4d9c-84ab-bec4295c931a/deploy-status)](https://app.netlify.com/sites/weapons-of-east-asia/deploys)
+
 ## Concept
 
 With my concept I want to give a picture of all the weapons in the collection that come from East A sia. I do this by means of an interactive bubble chart in which the size of the bubble shows how many objects there are in each category compared to the other bubbles.
@@ -44,7 +48,7 @@ SELECT (SAMPLE(?cho) AS ?choSample) ?type ?placeLabel WHERE {      <https://hdl.
 
 _The query above only fetches dutch names from the weapons. If you want to fetch english names, adjust the strings within the `VALUES ?typ`. Be aware of using uppercase and lowercase._
 
-###JSON
+### JSON
 
 After running the query, the data looks like this.
 
@@ -54,16 +58,27 @@ After running the query, the data looks like this.
  
 Click [here](https://github.com/MarcKunst/functional-programming/wiki/2.-Cleaning-data) for my data cleaning practice documentation.
 
+## Epmty values
+
+When the pie chart forms itself, it is unnecessary to show 0 values. To prevent this, I have written a function that filters out those empty values.
+
+```js
+function filterEmptyValues(data) {
+
+    const newData = data.map(item => 
+        item.value.countries.filter(country => country.countObj !== 0)
+    );
+    return newData;
+}
+```
+
+This function runs over the items and filters out all empty values for each item. View my [wiki](https://github.com/MarcKunst/frontend-data/wiki/5.-Data-transformeren) for more information.
+
 ## Update pattern
 
 Within the visualization it is possible to select a weapon type bubble. When the user does this, the pie chart next to that weapon type will show how many weapons are in the collection per country in East Asia.
 
 The pie chart adjusts when a weapon type is selected. More about this update function on the wiki page [9. Update function](https://github.com/MarcKunst/frontend-data/wiki/9.-Update-function)
-
-## Build status
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/78c11c1a-9928-4d9c-84ab-bec4295c931a/deploy-status)](https://app.netlify.com/sites/weapons-of-east-asia/deploys)
-
 
 ## Installation
 
@@ -93,6 +108,8 @@ The D3 pie chart example I used for this project was made by Karthik Thota. For 
 The background image that I use is a photo by [Maranda Vandergriff](https://unsplash.com/@mkvandergriff?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on Unsplash
 
 I would like to thank my colleagues [Martijn Keesmaat](https://github.com/martijnkeesmaat) for helping me understand the overall patterns of functional programming and [Chazz Mannering](https://github.com/Chazzers) for helping me out with a function that I use in my code
+
+Yhis video helped me understand the update function in D3 [video](https://www.youtube.com/watch?v=NlBt-7PuaLk) van Curran Kelleher.
 
 
 ## License
