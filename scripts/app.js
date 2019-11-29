@@ -307,7 +307,7 @@ function updatePieChart(g) {
     }
 
 function adjustHeader(data, n) {
-    
+
     document.getElementById('pieHeaderText').innerText = "Wapentype: " + data[n].key;
     document.getElementById('weaponAmount').innerText = "Totaal aantal: " + data[n].value.amount;
 }
@@ -317,23 +317,23 @@ function adjustHeader(data, n) {
 //The code below (related to the bubble chart legend) is written by Justin Palmer and adjusted by me to fit my project
 // link to code: http://bl.ocks.org/caged/6476579
 
-var height = 250
-var width = 360
-var svgLegend = d3.select("#bubbleLegend")
+const height = 250
+const width = 360
+const svgLegend = d3.select("#bubbleLegend")
   .append("svg")
-    .attr("width", width)
-    .attr("height", height)
+  .attr("width", width)
+  .attr("height", height)
 
 // The scale you use for bubble size
-var size = d3.scaleSqrt()
+let size = d3.scaleSqrt()
   .domain([1, 60])  // What's in the data, let's say it is percentage
   .range([1, 150])  // Size in pixel
 
 // Add legend: circles
-var valuesToShow = [15, 30, 60]
-var xCircle = 140
-var xLabel = 300
-var yCircle = 210
+let valuesToShow = [15, 30, 60]
+let xCircle = 140
+let xLabel = 300
+let yCircle = 210
 svgLegend
   .selectAll("legend")
   .data(valuesToShow)
@@ -371,7 +371,7 @@ svgLegend
 
 // Pie legend
 
-var pieLegend = d3.select("#pieLegend").append("svg")
+const pieLegend = d3.select("#pieLegend").append("svg")
 
 pieLegend.append("circle").attr("cx",70).attr("cy",10).attr("r", 6).style("fill", "#f1c40f91")
 pieLegend.append("text").attr("x", 110).attr("y", 15).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle")
