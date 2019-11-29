@@ -107,9 +107,9 @@ The D3 pie chart example I used for this project was made by Karthik Thota. For 
 
 The background image that I use is a photo by [Maranda Vandergriff](https://unsplash.com/@mkvandergriff?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on Unsplash
 
-I would like to thank my colleagues [Martijn Keesmaat](https://github.com/martijnkeesmaat) for helping me understand the overall patterns of functional programming and [Chazz Mannering](https://github.com/Chazzers) for helping me out with a function that I use in my code
+I would like to thank my colleagues [Mohamad al Ghorani](https://github.com/mohamadalghorani) for helping me out with the pie chart and [Chazz Mannering](https://github.com/Chazzers) for helping me out with the update function.
 
-Yhis video helped me understand the update function in D3 [video](https://www.youtube.com/watch?v=NlBt-7PuaLk) van Curran Kelleher.
+This video helped me understand the update function in D3 [video](https://www.youtube.com/watch?v=NlBt-7PuaLk) van Curran Kelleher.
 
 
 ## License
